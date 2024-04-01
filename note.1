@@ -1,0 +1,28 @@
+
+https://jarv.org/posts/command-with-timeout/
+
+package main
+
+import (
+    "context"
+    "os/exec"
+)
+
+func main() {
+    ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+    defer cancel()
+
+    cmd := exec.CommandContext(ctx, "sleep", "5")
+
+    out, err := cmd.CombinedOutput()
+
+    if (ctx.Err() == context.DeadlineExceeded) {
+        // Command was killed
+    }
+
+    if err != nil {
+        // If the command was killed, err will be "signal: killed"
+        // If the command wasn't killed, it contains the actual error, e.g. invalid command
+    }
+}
+
